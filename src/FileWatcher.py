@@ -35,9 +35,9 @@ class Watcher:
 
         self.observer.join()
         
-def insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender, fileNoOfRecords):
+def insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender):
     cur = g_dbCon.cursor()
-    cur.execute("INSERT INTO IncomingFileMetaData VALUES(?, ?, ?, ?, ?)", (fileName, fileArrivalTime, fileSize, fileSender, fileNoOfRecords))
+    cur.execute("INSERT INTO IncomingFileMetaData VALUES(?, ?, ?, ?)", (fileName, fileArrivalTime, fileSize, fileSender))
     g_dbCon.commit()
     
 class Handler(FileSystemEventHandler):
@@ -53,7 +53,7 @@ class Handler(FileSystemEventHandler):
                 fileSize = os.path.getsize(event.src_path)
                 fileArrivalTime = datetime.fromtimestamp(os.path.getctime(event.src_path)).strftime('%Y%m%d%H%M%S')
                 fileNameSplit = fileName.split('_')[-1]
-                fileNoOfRecords = 0
+                #fileNoOfRecords = 0
                 
                 if len(fileNameSplit) == len(fileName):
                     fileSender = "DEFAULT"
@@ -77,9 +77,9 @@ class Handler(FileSystemEventHandler):
                 print("File arrival time - %s" % fileArrivalTime)
                 print("File size - %s" % fileSize)
                 print("File sender - %s" % fileSender)
-                print("File no of records - %s" % fileNoOfRecords)
+                #print("File no of records - %s" % fileNoOfRecords)
                 
-                insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender, fileNoOfRecords)
+                insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender)
                 moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileArrivalTime + "." + fileExt
                 shutil.move(event.src_path, moveFileName)
 
