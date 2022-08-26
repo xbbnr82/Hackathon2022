@@ -47,8 +47,8 @@ class Handler(FileSystemEventHandler):
             return None
         else:
             print ("Received event - %s, path - %s" %(event.event_type, event.src_path))
-            if event.event_type == "created" and os.path.exists(event.src_path):
-                fileName = Path(event.src_path).stem
+            if event.event_type == "modified" and os.path.exists(event.src_path):
+                fileName = Path(event.src_path).name
                 fileExt = Path(event.src_path).suffix.replace('.','')
                 fileSize = os.path.getsize(event.src_path)
                 fileArrivalTime = datetime.fromtimestamp(os.path.getctime(event.src_path)).strftime('%Y%m%d%H%M%S')
@@ -60,8 +60,18 @@ class Handler(FileSystemEventHandler):
                 else:
                     fileSender = fileNameSplit
                 
-                if fileExt.lower() == "csv":
-                    fileNoOfRecords = len(pd.read_csv(event.src_path).index)
+                #mySearch = 5
+                #if fileExt.lower() == "csv":
+                #    while mySearch:
+                #        try:
+                #           csvFile = pd.read_csv(event.src_path, )
+                #            fileNoOfRecords = len(csvFile.index)
+                #            mySearch = 0
+                #        except Exception as inst:
+                #            fileNoOfRecords = 0
+                #            time.sleep(1)
+                #            print (inst)
+                #            mySearch -= 1
                     
                 print("File name - %s" % fileName)
                 print("File arrival time - %s" % fileArrivalTime)
@@ -70,7 +80,8 @@ class Handler(FileSystemEventHandler):
                 print("File no of records - %s" % fileNoOfRecords)
                 
                 insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender, fileNoOfRecords)
-                #shutil.move(g_pathInbound, g_pathArchive)
+                moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileArrivalTime + "." + fileExt
+                shutil.move(event.src_path, moveFileName)
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
@@ -98,7 +109,7 @@ if __name__ == '__main__':
        print("DB not exists.")
        sys.exit()
        
-    g_dbCon = sqlite3.connect(g_dbPath)
-    
+    g_dbCon = sqlite3.connect(g_dbPath, check_same_thread=False)
+        
     w = Watcher()
     w.run()
