@@ -8,6 +8,7 @@ from pathlib import Path
 import configparser
 import sqlite3
 import pandas as pd
+import shutil
 
 g_pathInbound = ""
 g_pathArchive = ""
@@ -69,7 +70,7 @@ class Handler(FileSystemEventHandler):
                 print("File no of records - %s" % fileNoOfRecords)
                 
                 insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender, fileNoOfRecords)
-                
+                #shutil.move(g_pathInbound, g_pathArchive)
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
