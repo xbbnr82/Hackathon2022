@@ -38,6 +38,7 @@ class Watcher:
 def insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender):
     cur = g_dbCon.cursor()
     cur.execute("INSERT INTO IncomingFileMetaData VALUES(?, ?, ?, ?)", (fileName, fileArrivalTime, fileSize, fileSender))
+    cur.execute("INSERT INTO ProcessData VALUES(?, ?, ?)", (fileName, fileArrivalTime, fileSender))
     g_dbCon.commit()
     
 class Handler(FileSystemEventHandler):
@@ -51,7 +52,10 @@ class Handler(FileSystemEventHandler):
                 fileName = Path(event.src_path).name
                 fileExt = Path(event.src_path).suffix.replace('.','')
                 fileSize = os.path.getsize(event.src_path)
-                fileArrivalTime = datetime.fromtimestamp(os.path.getctime(event.src_path)).strftime('%Y%m%d%H%M%S')
+                fileCreateTime = datetime.fromtimestamp(os.path.getctime(event.src_path))
+                mlsec = datetime.now().strftime("%f")
+                fileArrivalTime = fileCreateTime.strftime('%Y-%m-%d %H:%M:%S:{}'.format(mlsec))
+                fileTimestamp = fileCreateTime.strftime("%Y%m%d%H%M%S{}".format(mlsec))
                 fileNameSplit = fileName.split('_')[-1]
                 #fileNoOfRecords = 0
                 
@@ -80,7 +84,7 @@ class Handler(FileSystemEventHandler):
                 #print("File no of records - %s" % fileNoOfRecords)
                 
                 insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender)
-                moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileArrivalTime + "." + fileExt
+                moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileTimestamp + "." + fileExt
                 shutil.move(event.src_path, moveFileName)
 
 if __name__ == '__main__':

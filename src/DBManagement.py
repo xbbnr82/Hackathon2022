@@ -9,9 +9,10 @@ g_dbCon = sqlite3.Connection
 def createTable():
      con = sqlite3.connect(g_dbPath)
      cur = con.cursor()
-     cur.execute("CREATE TABLE IncomingFileMetaData(fileName, arrivalTime, size, sender)")
+     cur.execute("CREATE TABLE IncomingFileMetaData(fileName, arrivalTime DATETIME, size, sender)")
      cur.execute("CREATE TABLE FileAlerts(fileName, alertName, alertDesc)")
      cur.execute("CREATE TABLE AlertDetials(alertName, alertInterestedParty)")
+     cur.execute("CREATE TABLE ProcessData(fileName, arrivalTime DATETIME, sender)")
      con.commit()
      
      
