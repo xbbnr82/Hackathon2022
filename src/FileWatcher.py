@@ -58,7 +58,7 @@ class Handler(FileSystemEventHandler):
                 if len(fileNameSplit) == len(fileName):
                     fileSender = "DEFAULT"
                 else:
-                    fileSender = fileNameSplit
+                    fileSender = fileNameSplit.split('.')[0]
                 
                 #mySearch = 5
                 #if fileExt.lower() == "csv":
