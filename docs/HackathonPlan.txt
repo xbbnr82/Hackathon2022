@@ -1,0 +1,22 @@
+Tables
+ 1. Create table IncomingFileMetaData
+    fileName string,
+	arrivalTime timestamp,
+    size number,
+    sender string,
+    noOfRecords number,
+	
+ 2. Create table FileAlerts
+	fileName string,
+	alretName string,
+	alretDesc	string,
+	
+ 3. Create table AlertDetials
+	alretName string,
+	alretNotify string,
+
+Ideas:
+1. standard deviation of size alret
+2. standard deviation of time frequency alert
+3. standard deviation of no of records alert
+4. Lot of alters from this Sender
