@@ -11,14 +11,14 @@ def createTable():
      cur = con.cursor()
      cur.execute("CREATE TABLE IncomingFileMetaData(fileName, arrivalTime DATETIME, size, sender)")
      cur.execute("CREATE TABLE FileAlerts(fileName, alertName, alertDesc)")
-     cur.execute("CREATE TABLE AlertDetials(alertName, alertInterestedParty)")
+     cur.execute("CREATE TABLE AlertDetials(alertName, alertInterestedParty, variations, active)")
      cur.execute("CREATE TABLE ProcessData(fileName, arrivalTime DATETIME, sender)")
      con.commit()
      
      
-def insertAlertInterestedParty(alertName, alertParty):
+def insertAlertInterestedParty(alertName, alertParty, variations, active):
     cur = g_dbCon.cursor()
-    cur.execute("INSERT INTO AlertDetials VALUES(?, ?)", (alertName, alertParty))
+    cur.execute("INSERT INTO AlertDetials VALUES(?, ?, ?, ?)", (alertName, alertParty, variations, active))
     g_dbCon.commit()
     
 def exit_handler():
@@ -41,7 +41,9 @@ if __name__ == '__main__':
     while addMore == 'Y':
         alertName = input("Alert Name:")
         alertParty = input("Party:")
-        insertAlertInterestedParty(alertName, alertParty)
+        variations = input("variations:")
+        active = input("active:")
+        insertAlertInterestedParty(alertName, alertParty, variations, active)
         addMore = input("Add more records (Y/N): ")
         
     g_dbCon.close()

@@ -20,3 +20,15 @@ Ideas:
 2. standard deviation of time frequency alert
 3. standard deviation of no of records alert
 4. Lot of alters from this Sender
+
+UI
+alertName, alertInterestedParty, variations, active
+Label, TextBOx, TextBox, CheckBox
+
+1. ZSCORE_SIZE, email, anyText, 1 or 0
+2. PERCENTAGE_SIZE, email, anyText, 1 or 0
+3. FILE_ARRIVAL, email, anyText, 1 or 0
+4. SENDER, email,anyText, 1 or 0
+5. FILE_SIZE_LARGE, email, anyText, 1 or 0
+6. ZSCORE_FREQ, email, anyText, 1 or 0
+7. PERCENTAGE_FREQ, email, anyText, 1 or 0

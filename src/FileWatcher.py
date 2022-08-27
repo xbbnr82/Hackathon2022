@@ -63,25 +63,11 @@ class Handler(FileSystemEventHandler):
                     fileSender = "DEFAULT"
                 else:
                     fileSender = fileNameSplit.split('.')[0]
-                
-                #mySearch = 5
-                #if fileExt.lower() == "csv":
-                #    while mySearch:
-                #        try:
-                #           csvFile = pd.read_csv(event.src_path, )
-                #            fileNoOfRecords = len(csvFile.index)
-                #            mySearch = 0
-                #        except Exception as inst:
-                #            fileNoOfRecords = 0
-                #            time.sleep(1)
-                #            print (inst)
-                #            mySearch -= 1
                     
                 print("File name - %s" % fileName)
                 print("File arrival time - %s" % fileArrivalTime)
                 print("File size - %s" % fileSize)
                 print("File sender - %s" % fileSender)
-                #print("File no of records - %s" % fileNoOfRecords)
                 
                 insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender)
                 moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileTimestamp + "." + fileExt
@@ -114,6 +100,8 @@ if __name__ == '__main__':
        sys.exit()
        
     g_dbCon = sqlite3.connect(g_dbPath, check_same_thread=False)
+    
+    print ("File watcher has started.")
         
     w = Watcher()
     w.run()
