@@ -45,8 +45,8 @@ if __name__ == '__main__':
        
     print("\nAdd Alert interested party\n")
     
-    addMore = 'Y'
-    while addMore == 'Y':
+    addMore = 'y'
+    while addMore.lower() == 'y':
         alertName = input("Alert Name:")
         alertParty = input("Party:")
         variations = input("variations:")
