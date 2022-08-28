@@ -28,9 +28,17 @@ def exit_handler():
 if __name__ == '__main__':
     atexit.register(exit_handler)
     curDirPath = os.path.dirname(os.path.realpath(__file__))
-    g_dbPath = curDirPath + "\\..\\db\\ddm.db"
+    g_dbPath = curDirPath + "\\..\\db\\"
+    
+    pathExists = os.path.exists(g_dbPath)
+    if pathExists == False:
+        os.mkdir(g_dbPath)
+        
+    g_dbPath = g_dbPath + "ddm.db"
+    
+    pathExists = os.path.exists(g_dbPath)
      
-    if not os.path.exists(g_dbPath):
+    if pathExists == False:
        createTable()
        
     g_dbCon = sqlite3.connect(g_dbPath)
