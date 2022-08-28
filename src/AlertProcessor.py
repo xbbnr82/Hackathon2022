@@ -38,22 +38,20 @@ def zscoreSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
 
 def percentageSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
     print("Processing Percentage Size Alert:")
-    percentageOfSizeDiff = ((int(resFileMetaDataList[0][1]) / int(resFileMetaDataList[1][1])) * 100.0)-100
-    print (resFileMetaDataList[0][1])
-    print (resFileMetaDataList[1][1])
-            
-    percentageSizeLimit = int(alertProc[2])
-    if percentageOfSizeDiff > percentageSizeLimit or percentageOfSizeDiff < -percentageSizeLimit:
-        alertDesc = "The File {0} size {1}KB with percentage {2} is outside the limit of +/-{3} Percentage of last record.".format(fetchedResult[0], resFileMetaDataList[0][1], percentageOfSizeDiff, percentageSizeLimit)
-        print (alertDesc)
-        cur.execute("INSERT INTO FileAlerts VALUES(?, ?, ?)", (fetchedResult[0], g_percentageSizeAlert, alertDesc))
+    if resFileMetaDataList and len(resFileMetaDataList) > 1:
+        percentageOfSizeDiff = ((int(resFileMetaDataList[0][1]) / int(resFileMetaDataList[1][1])) * 100.0)-100
+        print (resFileMetaDataList[0][1])
+        print (resFileMetaDataList[1][1])
+                
+        percentageSizeLimit = int(alertProc[2])
+        if percentageOfSizeDiff > percentageSizeLimit or percentageOfSizeDiff < -percentageSizeLimit:
+            alertDesc = "The File {0} size {1}KB with percentage {2} is outside the limit of +/-{3} Percentage of last record.".format(fetchedResult[0], resFileMetaDataList[0][1], percentageOfSizeDiff, percentageSizeLimit)
+            print (alertDesc)
+            cur.execute("INSERT INTO FileAlerts VALUES(?, ?, ?)", (fetchedResult[0], g_percentageSizeAlert, alertDesc))
 
-def fileArrivalAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
+def fileArrivalAlert(cur, fetchedResult, alertProc):
     print("Processing File Arrival Alert:")
-    percentageOfSizeDiff = ((int(resFileMetaDataList[0][1]) / int(resFileMetaDataList[1][1])) * 100.0)-100
-    print (fetchedResult[0])
-    print (fetchedResult[1])
-            
+   
     fileArraivalVariation = str(alertProc[2]).split(',')
     if fileArraivalVariation and len(fileArraivalVariation) == 2:
         if fileArraivalVariation[0] == fetchedResult[0]:
@@ -67,7 +65,7 @@ def fileArrivalAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
             except Exception as inst:
                 print (inst)
                 arrivalDiff = 0
-                                 
+                                
             if arrivalDiff > 60 or arrivalDiff < -60:
                 alertDesc = "The File {0} Arrival is delayed by {1} minutes".format(fetchedResult[0], int(arrivalDiff/60))
                 print (alertDesc)
@@ -82,14 +80,14 @@ def sendNotifyAlert(cur, fetchedResult, alertProc):
         
 def fileSizeLargeAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
     print("Processing File size Large Alert:")
-    if int(resFileMetaDataList[0][1]) > int(alertProc[2]):
+    if resFileMetaDataList and int(resFileMetaDataList[0][1]) > int(alertProc[2]):
         alertDesc = "The File {0} has the large size of {1}".format(fetchedResult[0], resFileMetaDataList[0][1])
         print (alertDesc)
         cur.execute("INSERT INTO FileAlerts VALUES(?, ?, ?)", (fetchedResult[0], g_fileSizeLargeAlert, alertDesc))
 
 def fileSizeSmallAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
     print("Processing File size small Alert:")
-    if int(resFileMetaDataList[0][1]) < int(alertProc[2]):
+    if resFileMetaDataList and int(resFileMetaDataList[0][1]) < int(alertProc[2]):
         alertDesc = "The File {0} has the small size of {1}".format(fetchedResult[0], resFileMetaDataList[0][1])
         print (alertDesc)
         cur.execute("INSERT INTO FileAlerts VALUES(?, ?, ?)", (fetchedResult[0], g_fileSizeSmallAlert, alertDesc))
@@ -127,7 +125,7 @@ if __name__ == '__main__':
                     percentageSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
                 
                 if alertProc[0] == g_fileArrivalAlert and alertProc[3] == "1":
-                    fileArrivalAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
+                    fileArrivalAlert(cur, fetchedResult, alertProc)
                 
                 if alertProc[0] == g_senderNotifyAlert and alertProc[3] == "1":
                     sendNotifyAlert(cur, fetchedResult, alertProc)
