@@ -1,0 +1,107 @@
+{% extends "index.html" %} {% load static %} {% block nav-dashboard %}
+<a class="nav-link active" aria-current="page" href="/">Dashboard</a>
+{% endblock %} {% block main-block %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <a href="/files" class="stretched-link"> </a>
+      <div class="card bg-light mb-3 text-center" style="max-width: 18rem">
+        <div class="card-header">Received Files</div>
+        <div class="card-body">
+          <img
+            src="{% static 'image/chart.png' %}"
+            width="80"
+            height="80"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <h5 class="card-title">Light card title</h5>
+          <p class="card-text">200/500</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <a href="/files" class="stretched-link"> </a>
+      <div class="card bg-light mb-3 text-center" style="max-width: 18rem">
+        <div class="card-header">Received Files</div>
+        <div class="card-body">
+          <img
+            src="{% static 'image/chart.png' %}"
+            width="80"
+            height="80"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <h5 class="card-title">Light card title</h5>
+          <p class="card-text">200/500</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <a href="/files" class="stretched-link"> </a>
+      <div class="card bg-light mb-3 text-center" style="max-width: 18rem">
+        <div class="card-header">Received Files</div>
+        <div class="card-body">
+          <img
+            src="{% static 'image/chart.png' %}"
+            width="80"
+            height="80"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <h5 class="card-title">Light card title</h5>
+          <p class="card-text">200/500</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <a href="/files" class="stretched-link"> </a>
+      <div class="card bg-light mb-3 text-center" style="max-width: 18rem">
+        <div class="card-header">Received Files</div>
+        <div class="card-body">
+          <img
+            src="{% static 'image/chart.png' %}"
+            width="80"
+            height="80"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <h5 class="card-title">Light card title</h5>
+          <p class="card-text">200/500</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <a href="/files" class="stretched-link"> </a>
+      <div class="card bg-light mb-3 text-center">
+        <div class="card-header">Received Files</div>
+        <div class="card-body">
+          <img
+            src="{% static 'image/bar.png' %}"
+            width="80%"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <p class="card-text">200/500</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <a href="/files" class="stretched-link"> </a>
+      <div class="card bg-light mb-3 text-center">
+        <div class="card-header">Received Files</div>
+        <div class="card-body">
+          <img
+            src="{% static 'image/bar.png' %}"
+            width="80%"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <p class="card-text">200/500</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

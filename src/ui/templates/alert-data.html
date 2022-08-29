@@ -1,0 +1,172 @@
+{% extends "index.html" %} {% load static %} {% block nav-alert-data %}
+<a class="nav-link active" aria-current="page" href="alertData">Alert Data</a>
+{% endblock %} {% block main-block %}
+<!-- Button trigger modal -->
+<div style="margin: 0 10px">
+  <div style="text-align: right; margin-bottom: 10px">
+    <!-- Button trigger modal -->
+    <button
+      type="button"
+      class="btn btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#alertModal"
+    >
+      Add Alert
+    </button>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="alertModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Alert</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <label
+                  class="input-group-text"
+                  for="alertName"
+                  style="width: 135px"
+                >
+                  Name
+                </label>
+                <select class="form-select" name="alertName" id="alertName">
+                  <option value="ZSCORE_SIZE" selected>Z Score Size</option>
+                  <option value="PERCENTAGE_SIZE">Percentage Size</option>
+                  <option value="ZSCORE_FREQ">Z Score Frequency</option>
+                  <option value="PERCENTAGE_FREQ">Percentage Frequency</option>
+                  <option value="SENDER">Sender</option>
+                  <option value="FILE_SIZE_LARGE">File Size Large</option>
+                </select>
+              </div>
+              <div class="input-group mb-3">
+                <label
+                  class="input-group-text"
+                  for="alertInterestedParty"
+                  style="width: 135px"
+                >
+                  Interested Party
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="alertInterestedParty"
+                  placeholder="Email"
+                  name="alertInterestedParty"
+                  aria-label="Email"
+                  aria-describedby="basic-addon1"
+                  required
+                />
+              </div>
+              <div class="input-group mb-3">
+                <label
+                  class="input-group-text"
+                  for="variations"
+                  style="width: 135px"
+                >
+                  Variations
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="variations"
+                  placeholder="..."
+                  aria-label="variations"
+                  name="variations"
+                  aria-describedby="basic-addon1"
+                  required
+                />
+              </div>
+              <div class="input-group mb-3">
+                <label
+                  class="input-group-text"
+                  for="active"
+                  style="width: 135px"
+                >
+                  Active
+                </label>
+                <select class="form-select" name="active" id="active">
+                  <option selected value="1">True</option>
+                  <option value="0">False</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    {% if data %}
+    <table class="table table-hover table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Alert Name</th>
+          <th scope="col">Interested Party</th>
+          <th scope="col">Variations</th>
+          <th scope="col">Active</th>
+          {% comment %}
+          <th scope="col">Action</th>
+          {% endcomment %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in data %}
+        <tr>
+          <th scope="row">{{d.alertName}}</th>
+          <td>{{d.alertInterestedParty}}</td>
+          <td>{{d.variations}}</td>
+          <td>{{d.active}}</td>
+          {% comment %}
+          <td>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              style="width: 80px"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              style="width: 80px"
+            >
+              Delete
+            </button>
+          </td>
+          {% endcomment %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% else %}
+    <h1>No Data</h1>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

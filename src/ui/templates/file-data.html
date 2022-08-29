@@ -1,0 +1,35 @@
+{% extends "index.html" %} {% load static %} {% block nav-file-data %}
+<a class="nav-link active" aria-current="page" href="fileData">File Data</a>
+{% endblock %} {% block main-block %}
+<div style="margin: 10px">
+  {% if data %}
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">File Id</th>
+        <th scope="col">File Name</th>
+        <th scope="col">Size</th>
+        <th scope="col">Sender</th>
+        <th scope="col">No of Records</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in data %}
+      <tr>
+        <th scope="row">{{d.fileID}}</th>
+        <td style="word-break: break-all">
+          {% if d.fileName|length < 30 %} {{d.fileName}} {% else %}{{d.fileName|slice:30}}... {% endif %}
+        </td>
+        <td>{{d.size}}</td>
+        <td>{{d.sender}}</td>
+        <td>{{d.noOfRecords}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+  <h1>No Data</h1>
+  {% endif %}
+</div>
+{% endblock %}
