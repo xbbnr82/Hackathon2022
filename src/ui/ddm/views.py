@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
-from ddm.models import IncomingFileMetaData, FileAlert, AlertDetial
+from ReadWriteData import getAlertData, getFileData , insertAlertData, getFileAlertData
 
 
 def index(request):
@@ -11,19 +11,19 @@ def index(request):
 def alertData(request):
     if request.method == "POST":
         data = request.POST
-        alert = AlertDetial() 
-        alert.alertName = data.get("alertName")
-        alert.alertInterestedParty = data.get("alertInterestedParty")
-        alert.variations = data.get("variations")
-        alert.active = data.get("active")
-        alert.save()
-    alert = AlertDetial.objects.all()
+        insertAlertData(data.get("alertName"), data.get("alertInterestedParty"), data.get("variations"), data.get("active"))
+    alert = getAlertData()
     params  = {'data': alert}
     return render(request, 'alert-data.html', params)
     
 
 def FileMetaData(request):
-    fileMetaData = IncomingFileMetaData.objects.all()
+    fileMetaData = getFileData()
     params  = {'data': fileMetaData}
     return render(request, 'file-data.html', params)
+
+def FileAlertData(request):
+    fileMetaData = getFileAlertData()
+    params  = {'data': fileMetaData}
+    return render(request, 'file-alert-data.html', params)
 

@@ -1,0 +1,35 @@
+{% extends "index.html" %} {% load static %} {% block nav-file-alert-data %}
+<a class="nav-link active" aria-current="page" href="fileAlertData"
+  >File Alert Data</a
+>
+{% endblock %} {% block main-block %}
+<div style="margin: 10px">
+    {% if data %}
+  <table class="table table-hover table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">File Name</th>
+        <th scope="col">File Alert</th>
+        <th scope="col">File Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in data %}
+      <tr>
+        <th scope="row">
+          <a data-bs-toggle="tooltip" data-bs-title="hello">
+          {% if d.0|length < 30 %} {{d.0}} {% else %}{{d.0|slice:30}}... {% endif %}
+          </a>
+        </th>
+        <td>{{d.1}}</td>
+        <td>{{d.2}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+  <h1>No Data</h1>
+  {% endif %}
+</div>
+{% endblock %}
