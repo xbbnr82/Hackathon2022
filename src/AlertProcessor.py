@@ -39,7 +39,9 @@ def zscoreSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
 def percentageSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc):
     print("Processing Percentage Size Alert:")
     if resFileMetaDataList and len(resFileMetaDataList) > 1:
-        percentageOfSizeDiff = ((int(resFileMetaDataList[0][1]) / int(resFileMetaDataList[1][1])) * 100.0)-100
+        percentageOfSizeDiff = 0
+        if int(resFileMetaDataList[0][1]) != 0 and int(resFileMetaDataList[1][1]) != 0:
+            percentageOfSizeDiff = ((int(resFileMetaDataList[0][1]) / int(resFileMetaDataList[1][1])) * 100.0)-100
         print (resFileMetaDataList[0][1])
         print (resFileMetaDataList[1][1])
                 
@@ -110,33 +112,39 @@ if __name__ == '__main__':
     resAlertDetialsList = resAlertDetialsCur.fetchall()
     
     while 1:
-        resProcessData = cur.execute("SELECT * FROM ProcessData ORDER BY arrivalTime")
-        fetchedResult = resProcessData.fetchone()
-        if fetchedResult:
-            print ("\nProcessing - %s - %s - %s" % (fetchedResult[0], fetchedResult[2], fetchedResult[1]))
-            resFileMetaDataCur = cur.execute("SELECT arrivalTime, size FROM IncomingFileMetaData WHERE fileName = '%s' and sender = '%s' and arrivalTime <= '%s' ORDER BY arrivalTime desc LIMIT 4" % (fetchedResult[0], fetchedResult[2], fetchedResult[1]))
-            resFileMetaDataList = resFileMetaDataCur.fetchall()
+        try:
+            resProcessData = cur.execute("SELECT * FROM ProcessData ORDER BY arrivalTime")
+            fetchedResult = resProcessData.fetchone()
             
-            for alertProc in resAlertDetialsList:
-                if alertProc[0] == g_zscoreAlert and alertProc[3] == "1":
-                    zscoreSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
+            if fetchedResult:
+                cur.execute("DELETE FROM ProcessData WHERE fileName = '%s' and sender = '%s' and arrivalTime = '%s'" % (fetchedResult[0], fetchedResult[2], fetchedResult[1]))
+                g_dbCon.commit()
+                print ("\nProcessing - %s - %s - %s" % (fetchedResult[0], fetchedResult[2], fetchedResult[1]))
+                resFileMetaDataCur = cur.execute("SELECT arrivalTime, size FROM IncomingFileMetaData WHERE fileName = '%s' and sender = '%s' and arrivalTime <= '%s' ORDER BY arrivalTime desc LIMIT 4" % (fetchedResult[0], fetchedResult[2], fetchedResult[1]))
+                resFileMetaDataList = resFileMetaDataCur.fetchall()
+                
+                for alertProc in resAlertDetialsList:
+                    if alertProc[0] == g_zscoreAlert and alertProc[3] == "1":
+                        zscoreSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
+                            
+                    if alertProc[0] == g_percentageSizeAlert and alertProc[3] == "1":
+                        percentageSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
+                    
+                    if alertProc[0] == g_fileArrivalAlert and alertProc[3] == "1":
+                        fileArrivalAlert(cur, fetchedResult, alertProc)
+                    
+                    if alertProc[0] == g_senderNotifyAlert and alertProc[3] == "1":
+                        sendNotifyAlert(cur, fetchedResult, alertProc)
+                    
+                    if alertProc[0] == g_fileSizeLargeAlert and alertProc[3] == "1":
+                        fileSizeLargeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
                         
-                if alertProc[0] == g_percentageSizeAlert and alertProc[3] == "1":
-                    percentageSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
-                
-                if alertProc[0] == g_fileArrivalAlert and alertProc[3] == "1":
-                    fileArrivalAlert(cur, fetchedResult, alertProc)
-                
-                if alertProc[0] == g_senderNotifyAlert and alertProc[3] == "1":
-                    sendNotifyAlert(cur, fetchedResult, alertProc)
-                
-                if alertProc[0] == g_fileSizeLargeAlert and alertProc[3] == "1":
-                    fileSizeLargeAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
+                    if alertProc[0] == g_fileSizeSmallAlert and alertProc[3] == "1":
+                        fileSizeSmallAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
                     
-                if alertProc[0] == g_fileSizeSmallAlert and alertProc[3] == "1":
-                    fileSizeSmallAlert(cur, fetchedResult, resFileMetaDataList, alertProc)
-                    
-            cur.execute("DELETE FROM ProcessData WHERE fileName = '%s' and sender = '%s' and arrivalTime = '%s'" % (fetchedResult[0], fetchedResult[2], fetchedResult[1]))
-            g_dbCon.commit()
+                g_dbCon.commit()
+                
+        except Exception as ex:
+            print (ex)
         
     g_dbCon.close()

@@ -25,11 +25,14 @@ UI
 alertName, alertInterestedParty, variations, active
 Label, TextBOx, TextBox, CheckBox
 
-1. ZSCORE_SIZE, email, anyText, 1 or 0
-2. PERCENTAGE_SIZE, email, anyText, 1 or 0
-3. FILE_ARRIVAL, email, anyText, 1 or 0
-4. SENDER_NOTIFY, email,anyText, 1 or 0
-5. FILE_SIZE_LARGE, email, anyText, 1 or 0
-5. FILE_SIZE_SMALL, email, anyText, 1 or 0
-6. ZSCORE_FREQ, email, anyText, 1 or 0
-7. PERCENTAGE_FREQ, email, anyText, 1 or 0
+1. ZSCORE_SIZE, email, <above 1 or below -1>, 1 or 0
+2. PERCENTAGE_SIZE, email, <any number>, 1 or 0
+3. FILE_ARRIVAL, email, <filename,HH:MM:SS>, 1 or 0
+4. SENDER_NOTIFY, email, <Sender>, 1 or 0
+5. FILE_SIZE_LARGE, email, <Number>, 1 or 0
+5. FILE_SIZE_SMALL, email, <Number>, 1 or 0
+6. ZSCORE_FREQ, email, <above 1 or below -1>, 1 or 0
+7. PERCENTAGE_FREQ, email, <Number>, 1 or 0
+8. OUTSIDE_TRANSACTION_TIME, email, <HH:MM:SS,HH:MM:SS>, 1 or 0
+9. UNEXPECTED_EXT, email, <pdf, exl, csv, txt>, 1 or 0
+10. SENDER_EXPECTED_EXT, email, <pdf, exl, csv, txt>, 1 or 0

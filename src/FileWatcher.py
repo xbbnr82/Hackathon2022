@@ -49,29 +49,32 @@ class Handler(FileSystemEventHandler):
         else:
             print ("Received event - %s, path - %s" %(event.event_type, event.src_path))
             if event.event_type == "modified" and os.path.exists(event.src_path):
-                fileName = Path(event.src_path).name
-                fileExt = Path(event.src_path).suffix.replace('.','')
-                fileSize = os.path.getsize(event.src_path)
-                fileCreateTime = datetime.fromtimestamp(os.path.getctime(event.src_path))
-                mlsec = datetime.now().strftime("%f")
-                fileArrivalTime = fileCreateTime.strftime('%Y-%m-%d %H:%M:%S:{}'.format(mlsec))
-                fileTimestamp = fileCreateTime.strftime("%Y%m%d%H%M%S{}".format(mlsec))
-                fileNameSplit = fileName.split('_')[-1]
-                #fileNoOfRecords = 0
-                
-                if len(fileNameSplit) == len(fileName):
-                    fileSender = "DEFAULT"
-                else:
-                    fileSender = fileNameSplit.split('.')[0]
+                try:
+                    fileName = Path(event.src_path).name
+                    fileExt = Path(event.src_path).suffix.replace('.','')
+                    fileSize = os.path.getsize(event.src_path)
+                    fileCreateTime = datetime.fromtimestamp(os.path.getctime(event.src_path))
+                    mlsec = datetime.now().strftime("%f")
+                    fileArrivalTime = fileCreateTime.strftime('%Y-%m-%d %H:%M:%S:{}'.format(mlsec))
+                    fileTimestamp = fileCreateTime.strftime("%Y%m%d%H%M%S{}".format(mlsec))
+                    fileNameSplit = fileName.split('_')[-1]
                     
-                print("File name - %s" % fileName)
-                print("File arrival time - %s" % fileArrivalTime)
-                print("File size - %s" % fileSize)
-                print("File sender - %s" % fileSender)
+                    if len(fileNameSplit) == len(fileName):
+                        fileSender = "DEFAULT"
+                    else:
+                        fileSender = fileNameSplit.split('.')[0]
+                        
+                    print("File name - %s" % fileName)
+                    print("File arrival time - %s" % fileArrivalTime)
+                    print("File size - %s" % fileSize)
+                    print("File sender - %s" % fileSender)
+                    
+                    insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender)
+                    moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileTimestamp + "." + fileExt
                 
-                insertIncomingFileMetaData(fileName, fileArrivalTime, fileSize, fileSender)
-                moveFileName = g_pathArchive + "\\" + Path(event.src_path).stem + "_" + fileTimestamp + "." + fileExt
-                shutil.move(event.src_path, moveFileName)
+                    shutil.move(event.src_path, moveFileName)
+                except Exception as ex:
+                    print (ex)
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
