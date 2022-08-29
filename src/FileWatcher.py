@@ -104,7 +104,7 @@ if __name__ == '__main__':
        
     g_dbCon = sqlite3.connect(g_dbPath, check_same_thread=False)
     
-    print ("File watcher has started.")
+    print ("File watcher has started to watch \"%s\" directory." % g_pathInbound)
         
     w = Watcher()
     w.run()
