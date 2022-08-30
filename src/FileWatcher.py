@@ -88,18 +88,18 @@ if __name__ == '__main__':
     
     g_pathInbound = config['watcher']['inboundfolder'].strip('\"')
     if not os.path.exists(g_pathInbound):
-        print("Inbound Directory not exists")
+        print("Inbound Directory not exists. Configure watcher\\inboundfolder setting in props\\settings.ini file.")
         sys.exit()
         
     g_pathArchive = config['watcher']['archive'].strip('\"')
     if not os.path.exists(g_pathArchive):
-        print("Arcive Directory not exists")
+        print("Arcive Directory not exists. Configure watcher\\archive setting in props\\settings.ini file.")
         sys.exit()
         
     g_dbPath = curDirPath + "\\..\\db\\ddm.db"
     
     if not os.path.exists(g_dbPath):
-       print("DB not exists.")
+       print("DB not exists. use StartDBManagement batch file to setup db.")
        sys.exit()
        
     g_dbCon = sqlite3.connect(g_dbPath, check_same_thread=False)

@@ -16,7 +16,7 @@ g_fileSizeLargeAlert = "FILE_SIZE_LARGE"
 g_fileSizeSmallAlert = "FILE_SIZE_SMALL"
     
 def exit_handler():
-    print ('My application is ending!')
+    print ('Application is ending!')
     g_dbCon.close()
 
 def zscoreSizeAlert(cur, fetchedResult, resFileMetaDataList, alertProc):

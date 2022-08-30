@@ -22,7 +22,7 @@ def insertAlertInterestedParty(alertName, alertParty, variations, active):
     g_dbCon.commit()
     
 def exit_handler():
-    print ('My application is ending!')
+    print ('Application is ending!')
     g_dbCon.close()
      
 if __name__ == '__main__':
